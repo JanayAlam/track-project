@@ -37,7 +37,8 @@ class UserService extends Service {
      */
     public static function create(array $data): ?UserResource {
         try {
-            $user = User::create($data, ['password' => bcrypt($data['password'])]);
+            $data['password'] = bcrypt($data['password']);
+            $user = User::create($data);
         } catch (UniqueConstraintViolationException $e) {
             throw new Exception('Username or email has been already taken');
         }

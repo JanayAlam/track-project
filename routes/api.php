@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
 use \App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,10 +24,14 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1/auth', 'namespace' => 'App\
     Route::get('/user', [AuthController::class, 'authUser']);
 });
 
-Route::group(['prefix' => 'v1/users', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
+Route::group(['middleware' => 'api', 'prefix' => 'v1/users', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
     Route::get('/', [UserController::class, 'index']);
     Route::get('/{id}', [UserController::class, 'show']);
     Route::patch('/change-password', [UserController::class, 'changePassword']);
     Route::patch('/change-username', [UserController::class, 'changeUsername']);
     Route::patch('/change-email', [UserController::class, 'changeEmail']);
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'v1/admins', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
+   Route::post('/', [AdminController::class, 'create']) ;
 });
