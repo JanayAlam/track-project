@@ -1,0 +1,11 @@
+.toolbarStyle {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.authButton {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
