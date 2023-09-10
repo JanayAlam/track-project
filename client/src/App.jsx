@@ -2,6 +2,7 @@ import { Container, CssBaseline, ThemeProvider } from '@mui/material';
 import { StoreProvider } from 'easy-peasy';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Navbar from './components/UI/navbar';
+import PrivateOutlet from './outlets/PrivateOutlet';
 import Register from './pages/auth/register';
 import SignIn from './pages/auth/sign-in';
 import Homepage from './pages/homepage';
@@ -17,7 +18,9 @@ const App = () => {
                     <Navbar />
                     <Container maxWidth={'xl'}>
                         <Routes>
-                            <Route path={'/'} element={<Homepage />} />
+                            <Route path={'/*'} element={<PrivateOutlet />}>
+                                <Route path={''} element={<Homepage />} />
+                            </Route>
                             <Route path={'/register'} element={<Register />} />
                             <Route path={'/signin'} element={<SignIn />} />
                         </Routes>

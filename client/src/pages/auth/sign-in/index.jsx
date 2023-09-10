@@ -14,6 +14,7 @@ import InputField from '../../../components/atoms/input-field';
 import AuthFormHeader from '../../../components/shared/auth-form-header';
 import Card from '../../../components/shared/card';
 import LoadingButton from '../../../components/shared/loading-button';
+import useAuth from '../../../hooks/useAuth';
 
 const initialFormState = {
     email: '',
@@ -32,6 +33,12 @@ const SignIn = () => {
     const authActions = useStoreActions((actions) => actions.auth);
 
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
+
+    useEffect(() => {
+        document.title = `Track Project | Sign in`;
+        if (isAuthenticated) return navigate('/');
+    }, []);
 
     const {
         control,
@@ -58,10 +65,6 @@ const SignIn = () => {
         }
         navigate('/');
     };
-
-    useEffect(() => {
-        document.title = `Track Project | Sign in`;
-    }, []);
 
     return (
         <Container maxWidth="md">

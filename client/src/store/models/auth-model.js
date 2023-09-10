@@ -1,14 +1,15 @@
 import { action, thunk } from 'easy-peasy';
 import apiRequests from '../../api';
+import { LOCALSTORAGE_AUTH_TOKEN_KEY as L_KEY } from '../../constants';
 
-const initialState = { token: '', isAuthenticated: '' };
+const initialState = { token: '', isAuthenticated: '', user: {} };
 
 const authModel = {
     data: { ...initialState },
     isAuthenticated: false,
     isLoading: false,
     loadToken: action((state, _payload) => {
-        const token = localStorage.getItem('auth-token');
+        const token = localStorage.getItem(L_KEY);
         if (!token) return;
         state.data = {
             token: `Bearer ${token}`,
@@ -21,11 +22,12 @@ const authModel = {
             token: `${type.charAt(0).toUpperCase() + type.slice(1)} ${
                 payload.token
             }`,
-            isAuthenticated: true,
         };
+        state.isAuthenticated = true;
     }),
     removeToken: action((state, _payload) => {
         state.data = { ...initialState };
+        state.isAuthenticated = false;
     }),
     setLoading: action((state, payload) => {
         state.isLoading = !!payload;
