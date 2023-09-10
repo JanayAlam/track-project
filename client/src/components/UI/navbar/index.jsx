@@ -51,7 +51,9 @@ const Navbar = () => {
                             to={'/signin'}
                             component={RouterLink}
                             variant={
-                                pathname === '/signin' ? 'contained' : 'text'
+                                pathname === '/signin'
+                                    ? 'contained'
+                                    : 'outlined'
                             }
                             size="small"
                             color="primary"
@@ -63,7 +65,9 @@ const Navbar = () => {
                             to={'/register'}
                             component={RouterLink}
                             variant={
-                                pathname === '/register' ? 'contained' : 'text'
+                                pathname === '/register'
+                                    ? 'contained'
+                                    : 'outlined'
                             }
                             size="small"
                             color="primary"
@@ -79,3 +83,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

@@ -37,10 +37,9 @@ class AuthController extends Controller {
     protected function createNewToken(string $token): JsonResponse {
         return response()->json([
             'data' => [
-                'access_token' => $token,
+                'token' => $token,
                 'token_type' => 'bearer',
                 'expires_in' => auth()->factory()->getTTL() * 60,
-                'user' => new UserResource(auth()->user()),
             ],
         ]);
     }
