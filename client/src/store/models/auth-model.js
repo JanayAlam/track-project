@@ -1,33 +1,29 @@
 import { action, thunk } from 'easy-peasy';
 import apiRequests from '../../api';
-import { LOCALSTORAGE_AUTH_TOKEN_KEY as L_KEY } from '../../constants';
 
-const initialState = { token: '', isAuthenticated: '', user: {} };
+const initialState = { accessToken: '', user: {} };
 
 const authModel = {
     data: { ...initialState },
-    isAuthenticated: false,
     isLoading: false,
-    loadToken: action((state, _payload) => {
-        const token = localStorage.getItem(L_KEY);
-        if (!token) return;
+    // loadToken: action((state, _payload) => {
+    //     const token = localStorage.getItem(L_KEY);
+    //     if (!token) return;
+    //     state.data = {
+    //         token: `Bearer ${token}`
+    //     };
+    // }),
+    addData: action((state, payload) => {
+        const type = payload.tokenType;
         state.data = {
-            token: `Bearer ${token}`,
-            isAuthenticated: true,
-        };
-    }),
-    addToken: action((state, payload) => {
-        const type = payload.token_type;
-        state.data = {
-            token: `${type.charAt(0).toUpperCase() + type.slice(1)} ${
-                payload.token
+            accessToken: `${type.charAt(0).toUpperCase() + type.slice(1)} ${
+                payload.accessToken
             }`,
+            user: payload.user,
         };
-        state.isAuthenticated = true;
     }),
-    removeToken: action((state, _payload) => {
+    removeData: action((state, _payload) => {
         state.data = { ...initialState };
-        state.isAuthenticated = false;
     }),
     setLoading: action((state, payload) => {
         state.isLoading = !!payload;
@@ -35,20 +31,45 @@ const authModel = {
     login: thunk(async (actions, payload) => {
         actions.setLoading(true);
         try {
-            const res = await apiRequests.auth.login({
+            const response = await apiRequests.auth.login({
                 email: payload.email,
                 password: payload.password,
             });
-            actions.addToken(res.data.data);
+            actions.addData(response.data.data);
         } catch (e) {
-            if (e.response) {
-                return e.response.data.message;
+            if (!e?.response) {
+                return e.message;
+            } else if (
+                e.response?.status === 402 ||
+                e.response?.status === 401
+            ) {
+                const errors = e.response.data.errors;
+                return {
+                    email: errors.email[0],
+                    password: errors.password[0],
+                };
+            } else {
+                return 'Login failed';
             }
-            return e.message;
         } finally {
             actions.setLoading(false);
         }
         return '';
+    }),
+    logout: thunk(async (actions, _payload, helpers) => {
+        actions.setLoading(true);
+        const { getState } = helpers;
+        try {
+            await apiRequests.auth.logout(getState().data.accessToken);
+            actions.removeData();
+        } catch (e) {
+            if (!e?.response) {
+                return e.message;
+            }
+            return 'Logout failed';
+        } finally {
+            actions.setLoading(false);
+        }
     }),
 };
 

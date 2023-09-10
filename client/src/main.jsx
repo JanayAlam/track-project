@@ -8,8 +8,5 @@ import App from './App.jsx';
 import './styles/_reset.css';
 import './styles/index.css';
 
-// import axiosSetup from './axios-setup.js';
-// axiosSetup();
-
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 

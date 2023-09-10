@@ -42,7 +42,7 @@ Artisan::command('create-admin {username} {email} {password}',
             $user = UserService::create([
                 'username' => $username,
                 'email' => $email,
-                'password' => \Illuminate\Support\Facades\Hash::make($password),
+                'password' => $password,
             ]);
             if (!$user) throw new Exception('Could not create the user');
             AdminService::create([

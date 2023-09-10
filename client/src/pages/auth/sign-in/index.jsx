@@ -7,14 +7,13 @@ import Stack from '@mui/material/Stack';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import Button from '../../../components/atoms/button';
 import InputField from '../../../components/atoms/input-field';
 import AuthFormHeader from '../../../components/shared/auth-form-header';
 import Card from '../../../components/shared/card';
 import LoadingButton from '../../../components/shared/loading-button';
-import useAuth from '../../../hooks/useAuth';
 
 const initialFormState = {
     email: '',
@@ -29,15 +28,14 @@ const schema = Yup.object().shape({
 });
 
 const SignIn = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const { isLoading } = useStoreState((state) => state.auth);
     const authActions = useStoreActions((actions) => actions.auth);
 
-    const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
-
     useEffect(() => {
         document.title = `Track Project | Sign in`;
-        if (isAuthenticated) return navigate('/');
     }, []);
 
     const {
@@ -57,13 +55,33 @@ const SignIn = () => {
             email: data.email,
             password: data.password,
         });
+
         if (result) {
-            const errObject = { type: 'unauthorized', message: result };
-            setError('email', errObject);
-            setError('password', errObject);
+            if (typeof result === 'object') {
+                if (result.email) {
+                    setError('email', {
+                        type: 'unauthorized',
+                        message: result.email,
+                    });
+                }
+                if (result.password) {
+                    setError('password', {
+                        type: 'unauthorized',
+                        message: result.password,
+                    });
+                }
+                return;
+            }
+            const errObj = {
+                type: 'unauthorized',
+                message: result,
+            };
+            setError('email', errObj);
+            setError('password', errObj);
             return;
         }
-        navigate('/');
+
+        navigate(location.state?.from?.pathname || '/admin/dashboard');
     };
 
     return (
