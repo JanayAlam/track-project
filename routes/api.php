@@ -4,6 +4,9 @@ use \App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\AdminController;
+use App\Http\Controllers\Api\V1\ProfileController;
+use App\Http\Controllers\Api\V1\ProjectController;
+use App\Http\Controllers\Api\V1\IssueController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +37,20 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1/users', 'namespace' => 'App
 
 Route::group(['middleware' => 'api', 'prefix' => 'v1/admins', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
    Route::post('/', [AdminController::class, 'create']) ;
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'v1/profiles', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
+    Route::post('/', [ProfileController::class, 'store']);
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'v1/projects', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
+    Route::post('/', [ProjectController::class, 'store']);
+    Route::get('/', [ProjectController::class, 'getAll']);
+    Route::patch('/finish-project/{id}', [ProjectController::class, 'finishProject']);
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'v1/issues', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
+    Route::post('/', [IssueController::class, 'store']);
+    Route::get('/p/{id}', [IssueController::class, 'getIssuesByProjectId']);
+    Route::patch('/i/status/{id}', [IssueController::class, 'changeStatus']);
 });
