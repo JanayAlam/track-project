@@ -2,14 +2,14 @@
 
 namespace App\Http\Services\V1;
 
-use Exception;
-use Illuminate\Support\Facades\Hash;
-use TypeError;
 use App\Http\Resources\V1\User\UserCollection;
 use App\Http\Resources\V1\User\UserResource;
 use App\Http\Services\Service;
 use App\Models\User;
+use Exception;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Facades\Hash;
+use TypeError;
 
 class UserService extends Service {
     /**

@@ -13,7 +13,7 @@ class AdminResource extends JsonResource {
     public function toArray(Request $request): array {
         return [
             'id' => $this->id,
-            'becameAdminAt' => $this->created_at->format('d-m-Y H:i:s'),
+            'becameAdminAt' => $this->created_at->format('m-d-Y H:i:s'),
         ];
     }
 }

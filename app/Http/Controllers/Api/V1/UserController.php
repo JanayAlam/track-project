@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Controller;
+use App\Http\Filters\V1\UserFilter;
 use App\Http\Requests\V1\User\EmailUpdateRequest;
 use App\Http\Requests\V1\User\PasswordUpdateRequest;
 use App\Http\Requests\V1\User\UsernameUpdateRequest;
-use Exception;
-use App\Http\Controllers\Controller;
-use App\Http\Filters\V1\UserFilter;
 use App\Http\Resources\V1\User\UserCollection;
 use App\Http\Resources\V1\User\UserResource;
 use App\Http\Services\V1\UserService;
+use Exception;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

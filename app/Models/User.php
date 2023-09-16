@@ -16,6 +16,10 @@ class User extends Authenticatable implements JWTSubject {
         return $this->hasOne(Admin::class);
     }
 
+    public function profile(): HasOne {
+        return $this->hasOne(Profile::class);
+    }
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      * @return mixed

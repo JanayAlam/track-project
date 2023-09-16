@@ -45,7 +45,7 @@ To migrate the database just run-
 php artisan migrate:fresh
 ```
 
-Note: If you want to migrate the database with some default values then just run `php artisan migrate:fresh --seed` instead of the previous command.
+Note: If you want to migrate the database with some default values then just run `php artisan migrate:fresh --seed` instead of the previous command. All of the user have same password `123456`.
 
 
 ### Create Super Admin

@@ -9,10 +9,17 @@ import Typography from '@mui/material/Typography';
 import indigo from '@mui/material/colors/indigo';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
+import useAuth from '../../../hooks/useAuth';
 import styles from './navbar.module.css';
 
 const Navbar = () => {
     const { pathname } = useLocation();
+    const { isAuthenticated, logout: logoutUser } = useAuth();
+
+    const logoutHandler = async () => {
+        const error = await logoutUser();
+        if (error) return alert(error);
+    };
 
     return (
         <AppBar
@@ -26,51 +33,85 @@ const Navbar = () => {
         >
             <Container maxWidth="xl">
                 <Toolbar variant="dense" className={styles.toolbarStyle}>
-                    <Link
-                        component={RouterLink}
-                        to={'/'}
-                        underline="none"
-                        color={indigo[700]}
-                        sx={{ flexGrow: 1 }}
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1,
+                            flexGrow: 1,
+                        }}
                     >
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 1,
-                            }}
+                        <Link
+                            component={RouterLink}
+                            to={'/'}
+                            underline="none"
+                            color={indigo[700]}
                         >
-                            <img src={logo} alt="Logo" height={35} width={35} />
-                            <Typography component="div" variant="h6">
-                                Track Project
-                            </Typography>
-                        </Box>
-                    </Link>
+                            <Stack direction={'row'} gap={1}>
+                                <img
+                                    src={logo}
+                                    alt="Logo"
+                                    height={35}
+                                    width={35}
+                                />
+                                <Typography component="div" variant="h6">
+                                    Track Project
+                                </Typography>
+                            </Stack>
+                        </Link>
+                    </Box>
                     <Stack direction={'row'} gap={1}>
-                        <Button
-                            to={'/signin'}
-                            component={RouterLink}
-                            variant={
-                                pathname === '/signin' ? 'contained' : 'text'
-                            }
-                            size="small"
-                            color="primary"
-                            className={styles.authButton}
-                        >
-                            Sign in
-                        </Button>
-                        <Button
-                            to={'/register'}
-                            component={RouterLink}
-                            variant={
-                                pathname === '/register' ? 'contained' : 'text'
-                            }
-                            size="small"
-                            color="primary"
-                            className={styles.authButton}
-                        >
-                            Register
-                        </Button>
+                        {isAuthenticated ? (
+                            <>
+                                <Button
+                                    to={'/create-project'}
+                                    component={RouterLink}
+                                    size="small"
+                                    color="primary"
+                                    variant="outlined"
+                                    className={styles.authButton}
+                                >
+                                    Create Project
+                                </Button>
+                                <Button
+                                    onClick={logoutHandler}
+                                    className={styles.authButton}
+                                >
+                                    Logout
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Button
+                                    to={'/signin'}
+                                    component={RouterLink}
+                                    variant={
+                                        pathname === '/signin'
+                                            ? 'contained'
+                                            : 'outlined'
+                                    }
+                                    size="small"
+                                    color="primary"
+                                    className={styles.authButton}
+                                >
+                                    Sign in
+                                </Button>
+                                <Button
+                                    to={'/register'}
+                                    component={RouterLink}
+                                    variant={
+                                        pathname === '/register'
+                                            ? 'contained'
+                                            : 'outlined'
+                                    }
+                                    size="small"
+                                    color="primary"
+                                    className={styles.authButton}
+                                >
+                                    Register
+                                </Button>
+                            </>
+                        )}
                     </Stack>
                 </Toolbar>
             </Container>
@@ -79,3 +120,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
