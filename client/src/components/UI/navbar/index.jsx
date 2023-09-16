@@ -62,7 +62,24 @@ const Navbar = () => {
                     </Box>
                     <Stack direction={'row'} gap={1}>
                         {isAuthenticated ? (
-                            <div onClick={logoutHandler}>Logout</div>
+                            <>
+                                <Button
+                                    to={'/create-project'}
+                                    component={RouterLink}
+                                    size="small"
+                                    color="primary"
+                                    variant="outlined"
+                                    className={styles.authButton}
+                                >
+                                    Create Project
+                                </Button>
+                                <Button
+                                    onClick={logoutHandler}
+                                    className={styles.authButton}
+                                >
+                                    Logout
+                                </Button>
+                            </>
                         ) : (
                             <>
                                 <Button

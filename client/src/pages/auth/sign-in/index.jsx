@@ -81,7 +81,7 @@ const SignIn = () => {
             return;
         }
 
-        navigate(location.state?.from?.pathname || '/admin/dashboard');
+        navigate(location.state?.from?.pathname || '/');
     };
 
     return (

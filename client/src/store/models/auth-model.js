@@ -1,18 +1,12 @@
 import { action, thunk } from 'easy-peasy';
 import apiRequests from '../../api';
+import axios from '../../api/axios';
 
 const initialState = { accessToken: '', user: {} };
 
 const authModel = {
     data: { ...initialState },
     isLoading: false,
-    // loadToken: action((state, _payload) => {
-    //     const token = localStorage.getItem(L_KEY);
-    //     if (!token) return;
-    //     state.data = {
-    //         token: `Bearer ${token}`
-    //     };
-    // }),
     addData: action((state, payload) => {
         const type = payload.tokenType;
         state.data = {
@@ -27,6 +21,12 @@ const authModel = {
     }),
     setLoading: action((state, payload) => {
         state.isLoading = !!payload;
+    }),
+    setUser: action((state, payload) => {
+        state.data = {
+            ...state.data,
+            user: payload,
+        };
     }),
     login: thunk(async (actions, payload) => {
         actions.setLoading(true);
@@ -67,6 +67,24 @@ const authModel = {
                 return e.message;
             }
             return 'Logout failed';
+        } finally {
+            actions.setLoading(false);
+        }
+    }),
+    refreshUser: thunk(async (actions, _payload, helpers) => {
+        actions.setLoading(true);
+        const { getState } = helpers;
+        try {
+            await axios.get('/auth/user', {
+                headers: {
+                    Authorization: getState().data.accessToken,
+                },
+            });
+        } catch (e) {
+            if (!e?.response) {
+                return e.message;
+            }
+            return 'User fetching failed';
         } finally {
             actions.setLoading(false);
         }

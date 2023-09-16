@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1\Project;
 
+use App\Http\Resources\V1\Issue\IssueCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,6 +21,7 @@ class ProjectResource extends JsonResource {
             'profile_id' => $this->profile_id,
             'updated_at' => $this->updated_at->format('m-d-Y H:i:s'),
             'created_at' => $this->created_at->format('m-d-Y H:i:s'),
+            'issues' => new IssueCollection($this->issues),
         ];
     }
 }

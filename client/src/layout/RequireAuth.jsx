@@ -9,20 +9,24 @@ const RequireAuth = ({ isAdminRequired = false }) => {
     const location = useLocation();
 
     if (isAuthenticated) {
-        if (isAdminRequired) {
-            if (authUser.isAdmin) {
-                return <Outlet />;
+        if (authUser.profile) {
+            if (isAdminRequired) {
+                if (authUser.isAdmin) {
+                    return <Outlet />;
+                } else {
+                    return (
+                        <Navigate
+                            to={'/unauthorized'}
+                            state={{ from: location }}
+                            replace
+                        />
+                    );
+                }
             } else {
-                return (
-                    <Navigate
-                        to={'/unauthorized'}
-                        state={{ from: location }}
-                        replace
-                    />
-                );
+                return <Outlet />;
             }
         } else {
-            return <Outlet />;
+            return <Navigate to={'/create-profile'} />;
         }
     } else {
         return <Navigate to={'/signin'} state={{ from: location }} replace />;

@@ -46,6 +46,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1/profiles', 'namespace' => '
 Route::group(['middleware' => 'api', 'prefix' => 'v1/projects', 'namespace' => 'App\Http\Controllers\Api\V1'], function () {
     Route::post('/', [ProjectController::class, 'store']);
     Route::get('/', [ProjectController::class, 'getAll']);
+    Route::get('/{id}', [ProjectController::class, 'get']);
     Route::patch('/finish-project/{id}', [ProjectController::class, 'finishProject']);
 });
 

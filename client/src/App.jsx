@@ -8,8 +8,11 @@ import RequireAuth from './layout/RequireAuth';
 import AdminDashboard from './pages/admin-dashboard';
 import Register from './pages/auth/register';
 import SignIn from './pages/auth/sign-in';
+import CreateProfile from './pages/create-profile';
+import CreateProject from './pages/create-project';
 import Unauthorized from './pages/errors/Unauthorized';
 import Homepage from './pages/homepage';
+import Project from './pages/project';
 import store from './store';
 import theme from './theme';
 
@@ -29,6 +32,10 @@ const App = () => {
                                         path={'/unauthorized'}
                                         element={<Unauthorized />}
                                     />
+                                    <Route
+                                        path={'/create-profile'}
+                                        element={<CreateProfile />}
+                                    />
 
                                     <Route element={<OnlyUnauthorized />}>
                                         <Route
@@ -46,6 +53,14 @@ const App = () => {
                                         <Route
                                             path={'/'}
                                             element={<Homepage />}
+                                        />
+                                        <Route
+                                            path={'/project/:id'}
+                                            element={<Project />}
+                                        />
+                                        <Route
+                                            path={'/create-project'}
+                                            element={<CreateProject />}
                                         />
                                     </Route>
 

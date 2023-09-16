@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Resources\V1\Project\ProjectResource;
 use App\Http\Services\V1\ProjectService;
 use Exception;
 use App\Http\Controllers\Controller;
@@ -41,6 +42,17 @@ class ProjectController extends Controller {
             $projects = ProjectService::getByProfileId(auth()->user()->profile->id);
             return response()->json([
                 'data' => $projects,
+            ]);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function get(int $id) {
+        try {
+            $project = ProjectService::getProject($id);
+            return response()->json([
+                'data' => new ProjectResource($project),
             ]);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
